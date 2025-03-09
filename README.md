@@ -8,7 +8,7 @@ Solution Overview
 Our proposed web-based application will compose of these functionalities:
 1. Incident Reporting
 2. Safety Resources
-3. User Management•
+3. User Management
 
 1. Incident Reporting: If you see or experience a safety concern or incident, report it easily using our SafeCampus Tech system or Application.What to report:Suspicious behaviour or activity.Harassment or bullying.Property damage or theft.Medical emergencies or injuries
 
