@@ -12,8 +12,8 @@ class User(db.Model):
         return f"User('{self.Username}', '{self.Email}')"
     
 class Incident(db.Model):
-    IncidentID = db.Column(db.integer, primary_key=True)
-    UserID = db.Column(db.integer, db.ForeignKey('user.UserID'))
+    IncidentID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, db.ForeignKey('user.UserID'))
     IncidentType = db.Column(db.String(10), nullable=False)
     Description = db.Column(db.Text, nullable=False)
     Location = db.Column(db.String(20), nullable=False)
