@@ -1,76 +1,83 @@
-from flask import Flask, render_template, request, redirect
-from werkzeug.security import generate_password_hash  # Import for password hashing
-from forms import RegistrationForm  # Import the RegistrationForm
-from werkzeug.security import generate_password_hash  # Import for password hashing
-from config import config
-from forms import IncidentReportForm 
-from forms import RegistrationForm
+from flask import Flask, config, render_template, request, redirect, make_response, url_for,session
+from werkzeug.security import generate_password_hash , check_password_hash # Import for password hashing
+from flask_login import LoginManager,UserMixin, login_user, logout_user
+from forms import RegistrationForm, IncidentReportForm  # Import forms
 from models import Incident, User, db
+from flask_sqlalchemy import SQLAlchemy
+
+import hashlib
+import datetime
 
 # Initialize the app
 app = Flask(__name__)
-app.config.from_object(config)
+app.config.from_object('config.config')
+
 
 # Initialize the database
 db.init_app(app)
 
+# LoginManager is needed for our application 
+# to be able to log in and out users
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+
+# Creates a user loader callback that returns the user object given an id
+@login_manager.user_loader
+def loader_user(user_id):
+    return User.query.get(user_id)
+
 @app.route('/')
 def index():
+    if "username" in session:
+        return redirect(url_for('dashboard'))
     return render_template('index.html')
 
 @app.route('/home')
 def home():
     return render_template('home.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+
+@login_manager.user_loader
+def loader_user(user_id):
+    return User.query.get(user_id)
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # Simple credential check (for demonstration purposes)
-        if username == 'admin' and password == 'password':
-            return redirect('home.html')
-        else:
-            error = 'Invalid credentials. Please try again.'
-            return render_template('login.html', error=error)
-    return render_template('login.html')
+    if request.method == "POST":
+        user = User.query.filter_by(
+            username=request.form.get("username")).first()
+        if user.password == request.form.get("password"):
+            login_user(user)
+            return redirect(url_for("home"))
+    return render_template("login.html")
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        hashed_password = generate_password_hash(password)  # Hash the password
-        new_user = User(username=username, password=hashed_password)  # Create a new user instance
-        db.session.add(new_user)  # Add the new user to the session
-        db.session.commit()  # Commit the session to save the user to the database
+  # If the user made a POST request, create a new user
+    if request.method == "POST":
+        user = User(username=request.form.get("username"),
+                     password=request.form.get("password"))
+        # Add the user to the database
+        db.session.add(user)
+        # Commit the changes made
+        db.session.commit()
+        # Once user account created, redirect them
+        # to login route (created later on)
+        return redirect(url_for("login"))
+    # Renders sign_up template if user made a GET request
+    return render_template("register.html")
 
-        return redirect('login.html')  # Redirect to login after successful registration
-    return render_template('register.html', form=form)
-
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 @app.route('/dashboard')
 def dashboard():
-    incidents = Incident.query.all()  # Fetch all incidents from the database
-    return render_template('dashboard.html', incidents=incidents)  # Pass incidents to the template
+    return render_template('dashboard.html')
 
-
-@app.route('/admindashboard')
-def admin_dashboard():
-    return render_template('admindashboard.html')
-
-@app.route('/report', methods=['GET', 'POST'])
-def report():
-    form = IncidentReportForm()
-    if form.validate_on_submit():
-        incident_type = form.incident_type.data
-        incident_description = form.incident_description.data
-        new_incident = Incident(incident_type=incident_type, incident_description=incident_description)  # Create a new incident instance
-        db.session.add(new_incident)  # Add the new incident to the session
-        db.session.commit()  # Commit the session to save the incident to the database
-        return redirect('/dashboard')  # Redirect to dashboard after successful report
-    return render_template('report.html', form=form)
 
 
 @app.route('/resource')

@@ -12,18 +12,21 @@
     </header>
 
     <main>
-        {% if error %}
+        <!-- {% if error %}
             <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <form action="{{ url_for('login') }}" method="POST">
+        {% endif %} -->
+        <form id="auth-form" action="{{ url_for('login') }}" method="POST">
 
             <label for="username">username:</label>
-            <input type="text" id="username" name="username" required><br><br>
+            <input 
+                type="text" 
+                id="username" 
+                name="username" required><br><br>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br><br>
 
-            <button type="submit">Login</button>
+            <button type="submit" class="bt bt-login">Login</button>
         </form>
         <p>Don't have an account? <a href="register.html">Register here</a></p>
     </main>
@@ -33,3 +36,4 @@
     </footer>
 </body>
 </html>
+

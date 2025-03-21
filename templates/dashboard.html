@@ -1,42 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dashboard</title>
 </head>
 <body>
-    <header>
-        <h1>Admin Dashboard</h1>
-    </header>
-
-    <main>
-        <h2>Reported Incidents</h2>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Description</th>
-                <th>Date</th>
-            </tr>
-            {% for incident in incidents %}
-            <tr>
-                <td>{{ incident.id }}</td>
-                <td>{{ incident.incident_type }}</td>
-                <td>{{ incident.incident_location }}</td>
-                <td>{{ incident.incident_description }}</td>
-                <td>{{ incident.incident_date }}</td>
-            </tr>
-            {% endfor %}
-
-        
-        </table>
-    </main>
-
-    <footer>
-        <p>© 2025 Campus Security. All rights reserved.</p>
-    </footer>
+    <h1>Welcome, {{ username }}!</h1>
+    <p>First Name: {{ user_details.first_name }}</p>
+    <p>Last Name: {{ user_details.last_name }}</p>
+    <p>Student ID: {{ user_details.student_id }}</p>
+    <p>Email: {{ user_details.email }}</p>
+    <p>Phone: {{ user_details.phone }}</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

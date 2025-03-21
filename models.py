@@ -1,16 +1,17 @@
 
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(20), unique=True)
-    username = db.Column(db.String(20), unique=True)
+    username = db.Column(db.String(20), unique=True) 
     password = db.Column(db.String(128))
 
     incidents = db.relationship('Incident', backref='user', lazy=True)
+    # Removed user_id as it is not utilized
 
     def __repr__(self):
         return f"User('{self.username}')"
