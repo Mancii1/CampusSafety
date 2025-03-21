@@ -1,0 +1,40 @@
+.slider url {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.slider li {
+    width: 300px;
+    margin-right: 20px;
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(red, green, blue, alpha);
+    transform: transform 0,3s ease;
+}
+.slider li:hover{
+    transform: scale(1.05);
+}
+.slider a{
+    text-decoration: none;
+    color:darkslategrey;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.slider a:hover{
+    color:aqua;
+}
+
+@media (max-width: 750px){
+    .slider ul{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .slider li{
+        width:100%;
+        margin: 10px 0;
+    }
+}
