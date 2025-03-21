@@ -21,11 +21,16 @@
                 <th>Description</th>
                 <th>Date</th>
             </tr>
+            {% for incident in incidents %}
             <tr>
-                <td>1</td>
-                <td>Theft</td>
-                <td>Library</td>
-                <td>Stolen laptop</td>
+                <td>{{ incident.id }}</td>
+                <td>{{ incident.incident_type }}</td>
+                <td>{{ incident.incident_location }}</td>
+                <td>{{ incident.incident_description }}</td>
+                <td>{{ incident.incident_date }}</td>
+            </tr>
+            {% endfor %}
+
         
         </table>
     </main>

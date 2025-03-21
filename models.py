@@ -1,43 +1,30 @@
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
 class User(db.Model):
-    UserID = db.Column(db.Integer, primary_key=True)
-    Username = db.Column(db.String(20), nullable=False)
-    Email = db.Column(db.String(20), unique=True, nullable=False)
-    PasswordHash = db.Column(db.String(10), nullable=False)
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(20), unique=True)
+    username = db.Column(db.String(20), unique=True)
+    password = db.Column(db.String(128))
+
+    incidents = db.relationship('Incident', backref='user', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.Username}', '{self.Email}')"
-    
+        return f"User('{self.username}')"
+
 class Incident(db.Model):
-    IncidentID = db.Column(db.Integer, primary_key=True)
-    UserID = db.Column(db.Integer, db.ForeignKey('user.UserID'))
-    IncidentType = db.Column(db.String(10), nullable=False)
-    Description = db.Column(db.Text, nullable=False)
-    Location = db.Column(db.String(20), nullable=False)
-    DateTime = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    __tablename__ = 'incidents'
+    id = db.Column(db.Integer, primary_key=True)
+    incident_id = db.Column(db.String(20), unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    User = db.relationship('User', backref=db.backref('incidents', Theft=True))
+    incident_type = db.Column(db.String(20))
+    incident_date = db.Column(db.DateTime, default=db.func.current_timestamp())
+    incident_location = db.Column(db.String(20))
+    incident_description = db.Column(db.String(200))
 
     def __repr__(self):
-        return f"Incident('{self.IncidentType}', '{self.Description}')"
-    
-class SafetyResource(db.Model): 
-    ResourceID = db.Column(db.Integer, primary_key=True) 
-    ResourceType = db.Column(db.String(25), nullable=False) 
-    ResourceName = db.Column(db.String(50), nullable=False) 
-    ResourceDescription = db.Column(db.Text) 
-    ResourceContact = db.Column(db.String(10))
-
-    def __repr__(self): 
-      return f"SafetyResource('{self.ResourceType}', '{self.ResourceName}')"
-     
-class SafetyTip(db.Model): 
-    TipID = db.Column(db.Integer, primary_key=True) 
-    TipTitle = db.Column(db.String(50), nullable=False) 
-    TipDescription = db.Column(db.Text, nullable=False)
-
-    def __repr__(self): 
-     return f"SafetyTip('{self.TipTitle}', '{self.TipDescription}')" 
+        return f"Incident('{self.incident_type}','{self.incident_description}')"
