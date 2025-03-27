@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 from functools import wraps
 from dotenv import load_dotenv
+from wtforms.validators import ValidationError
 
 # Load environment variables
 load_dotenv()
@@ -37,7 +38,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
     reports = db.relationship('Report', backref='author', lazy=True)
-
+def email_check(form, field):
+    if not field.data.endswith('@dut4life.ac.za'):
+       raise ValidationError('Only DUT email addresses are allowed.')
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
