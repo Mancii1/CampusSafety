@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Report Incident{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Report an Incident</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="reportForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Incident Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="suspicious">Suspicious Activity</option>
+                            <option value="harassment">Harassment or Bullying</option>
+                            <option value="property">Property Damage or Theft</option>
+                            <option value="medical">Medical Emergency</option>
+                            <option value="mental">Mental Health Crisis</option>
+                            <option value="other">Other</option>
+                            <option value="fire">Fire</option>
+                            <option value="accident">Accident</option>
+                            <option value="vandalism">Vandalism</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Building, Room, or Area" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="evidence" class="form-label">Evidence (Optional)</label>
+                        <input type="file" class="form-control" id="evidence" name="evidence" accept=".png,.jpg,.jpeg,.gif,.mp4,.mov,.avi">
+                        <div class="form-text">
+                            <i class="fas fa-info-circle"></i> Supported formats: PNG, JPG, JPEG, GIF, MP4, MOV, AVI (Max size: 16MB)
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> If this is an emergency, please call Campus Security immediately at 031 373 2000
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    if (confirm('Are you sure you want to submit this report? This action cannot be undone.')) {
+        return true;
+    }
+    e.preventDefault();
+    return false;
+});
+</script>
+{% endblock %} 

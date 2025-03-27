@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Incident Reports</h2>
+            {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('admin_reports') }}" class="btn btn-primary">Manage Reports</a>
+            {% endif %}
+        </div>
+        <div class="col text-end">
+            <a href="{{ url_for('report') }}" class="btn btn-success">Submit New Report</a>
+        </div>
+    </div>
+
+    {% if reports %}
+    <div class="row">
+        {% for report in reports %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ report.title }}</h5>
+                    <span class="badge bg-{{ 'success' if report.status == 'resolved' else 'warning' if report.status == 'in_progress' else 'secondary' }}">
+                        {{ report.status }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ report.description }}</p>
+                    <div class="mb-3">
+                        <strong>Location:</strong> {{ report.location }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Category:</strong> {{ report.category }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Date:</strong> {{ report.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                    </div>
+                    {% if report.evidence_file %}
+                    <div class="mb-3">
+                        <strong>Evidence:</strong>
+                        {% if report.evidence_file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                        <div class="mt-2">
+                            <img src="{{ url_for('uploaded_file', filename=report.evidence_file) }}" 
+                                 alt="Evidence" 
+                                 class="img-fluid rounded"
+                                 style="max-height: 200px;">
+                        </div>
+                        {% elif report.evidence_file.lower().endswith(('.mp4', '.mov', '.avi')) %}
+                        <div class="mt-2">
+                            <video controls class="w-100" style="max-height: 200px;">
+                                <source src="{{ url_for('uploaded_file', filename=report.evidence_file) }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Reported by: {{ report.author.username }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No reports found. Be the first to submit a report!
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

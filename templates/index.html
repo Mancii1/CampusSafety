@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center py-5 bg-light rounded">
+    <h1 class="display-4 mb-4">Welcome to DUT CampusSafe</h1>
+    <p class="lead mb-4">Your safety is our priority. Report incidents, access resources, and stay informed about campus safety.</p>
+    {% if not current_user.is_authenticated %}
+        <div class="d-grid gap-2 d-md-flex justify-content-center">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">Login</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-exclamation-triangle fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Report Incidents</h3>
+                <p class="card-text">Quickly report safety concerns, suspicious activities, or emergencies on campus.</p>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('report') }}" class="btn btn-primary">Report Now</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Report</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Safety Resources</h3>
+                <p class="card-text">Access emergency contacts, safety guidelines, and support services.</p>
+                <a href="{{ url_for('resources') }}" class="btn btn-primary">View Resources</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">Stay Informed</h3>
+                <p class="card-text">Track your reports and stay updated on campus safety information.</p>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('reports') }}" class="btn btn-primary">View Reports</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Login to View</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="emergency-section mt-5 p-4 bg-danger text-white rounded">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h2 class="mb-3">Emergency? Call Campus Security</h2>
+            <p class="mb-0">For immediate assistance, contact campus security at:</p>
+            <h3 class="mb-0">031 373 2000</h3>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="fas fa-phone-alt fa-4x mb-3"></i>
+            <p class="mb-0">24/7 Emergency Response</p>
+        </div>
+    </div>
+</div>
+<div class="safety-tips-section mt-5 p-4 bg-light text-dark rounded">
+    <h2 class="mb-3">Safety Tips and Guidelines for Campus Life</h2>
+    <p class="mb-0">Here are some important safety tips and guidelines to follow while on campus:</p>
+    <ul>
+        <li>Always be aware of your surroundings.</li>
+        <li>Report any suspicious activity to campus security.</li>
+        <li>Keep your personal belongings secure.</li>
+        <li>Use well-lit paths and walkways at night.</li>
+        <li>Do not prop open exterior doors.</li>
+        <li>Do not leave valuables unattended.</li>
+        <li>Always lock your dorm or apartment door.</li>
+        <li>Do not walk alone at night.</li>
+        <li>Trust your instincts.</li>
+    </ul>
+<div class="map-section mt-5 p-4 bg-light text-dark rounded">
+    <h2 class="mb-3">Campus Safety and Emergency Interactive Maps</h2>
+    <p class="mb-0">Explore our interactive maps to locate safety resources, emergency services, and important campus facilities.</p>
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/d/embed?mid=1..." width="100%" height="500"></iframe>
+    </div>
+</div>
+</div>
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted"> 2025 DUT CampusSafe. All rights reserved.</span>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="list-inline-item"><a href="{{ url_for('resources') }}">Resources</a></li>
+            <li class="list-inline-item"><a href="{{ url_for('reports') }}">Reports</a></li>
+            {% if current_user.is_authenticated %}
+                <li class="list-inline-item"><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li class="list-inline-item"><a href="{{ url_for('login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</footer>
+
+
+
+{% endblock %} 
